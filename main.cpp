@@ -1,24 +1,42 @@
 #include <SFML/Graphics.hpp>
 #include "Grid.h"
+#include "Utility.h"
 
-const int CELL_SIZE = 3;
-const int GRID_WIDTH = 300;
-const int GRID_HEIGHT = 300;
+const int CELL_SIZE = 4;
+const int GRID_WIDTH = 200;
+const int GRID_HEIGHT = 200;
+const int GRAIN_MULTIPLIER = 3;
+const int GRAIN_SPREAD = 5;
+
+sf::Color HSVtoRGB(float hue, float sat, float val) {
+    int h = static_cast<int>(hue / 60.0f) % 6;
+    float f = (hue / 60.0f) - h;
+    float p = val * (1 - sat);
+    float q = val * (1 - f * sat);
+    float t = val * (1 - (1 - f) * sat);
+
+    float r = 0, g = 0, b = 0;
+
+    switch (h) {
+        case 0: r = val, g = t, b = p; break;
+        case 1: r = q, g = val, b = p; break;
+        case 2: r = p, g = val, b = t; break;
+        case 3: r = p, g = q, b = val; break;
+        case 4: r = t, g = p, b = val; break;
+        case 5: r = val, g = p, b = q; break;
+    }
+
+    return sf::Color(
+        static_cast<sf::Uint8>(r * 255),
+        static_cast<sf::Uint8>(g * 255),
+        static_cast<sf::Uint8>(b * 255)
+    );
+}
 
 int main() {
     Grid grid(GRID_WIDTH, GRID_HEIGHT);
 
-    // Manually insert one yellow grain
-    sf::Color yellow(255, 255, 0);
-    sf::Color red(255, 0, 0);
-    sf::Color green(0, 255, 0);
-    sf::Color blue(0, 0, 255);
-
-    grid.set(70, 50, new Grain(yellow));
-    grid.set(70, 52, new Grain(red));
-    grid.set(70, 54, new Grain(green));
-    grid.set(70, 56, new Grain(blue));
-
+    float hue = 1.0f;
 
     sf::RenderWindow window(sf::VideoMode(GRID_WIDTH * CELL_SIZE, GRID_HEIGHT * CELL_SIZE), "Grain Test");
     sf::RectangleShape cellShape(sf::Vector2f(CELL_SIZE, CELL_SIZE));
@@ -36,10 +54,30 @@ int main() {
 
         timeSinceLastUpdate += clock.restart();
 
-        // Update the simulation at fixed intervals
-        while (timeSinceLastUpdate >= timePerUpdate) {
+        if (timeSinceLastUpdate >= timePerUpdate) {
             grid.update();
             timeSinceLastUpdate -= timePerUpdate;
+
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                hue += 0.2f;
+                if (hue >= 360) hue = 1;
+                sf::Color color = HSVtoRGB(hue, 1.0f, 1.0f);
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+                for (int i = 0; i < GRAIN_MULTIPLIER; ++i) {
+                    int gridX = mousePos.x / CELL_SIZE;
+                    int gridY = mousePos.y / CELL_SIZE;
+
+                    gridX += Utility::random_int(-GRAIN_SPREAD, GRAIN_SPREAD);
+                    gridY += Utility::random_int(-GRAIN_SPREAD, GRAIN_SPREAD);
+
+                    if (gridX >= 0 && gridX < GRID_WIDTH && gridY >= 0 && gridY < GRID_HEIGHT) {
+                        if (grid.get(gridX, gridY) == nullptr) {
+                            grid.set(gridX, gridY, new Grain(color));
+                        }
+                    }
+                }
+            }
         }
 
         window.clear();

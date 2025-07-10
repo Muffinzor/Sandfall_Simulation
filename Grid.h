@@ -22,6 +22,7 @@ public:
     void set(int x, int y, Grain* grain);
     Grain* get(int x, int y);
     void update();
+    void updateCell(int x, int y);
     void reset_grains();
     ~Grid();
 };

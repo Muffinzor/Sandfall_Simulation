@@ -11,6 +11,8 @@ add_executable(SandSimulator
         main.cpp
         Grid.cpp
         Grid.h
+        Utility.cpp
+        Utility.h
 )
 
 target_link_libraries(SandSimulator sfml-graphics sfml-window sfml-system)
