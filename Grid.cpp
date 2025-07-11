@@ -61,7 +61,9 @@ void Grid::updateCell(int x, int y) {
             } else {
                 Grain* blocking_grain = cells[nextY][currentX];
                 if (blocking_grain != nullptr && blocking_grain->velocity < current->velocity) {
-                    blocking_grain->velocity = current->velocity;
+                    float avg_velocity = (blocking_grain->velocity + current->velocity)/2;
+                    blocking_grain->velocity = avg_velocity;
+                    current->velocity = avg_velocity;
                 }
                 bool leftFree = (currentX > 0) && (cells[currentY + 1][currentX - 1] == nullptr);
                 bool rightFree = (currentX < width - 1) && (cells[currentY + 1][currentX + 1] == nullptr);
