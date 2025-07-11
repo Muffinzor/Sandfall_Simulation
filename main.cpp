@@ -42,7 +42,7 @@ int main() {
     sf::RectangleShape cellShape(sf::Vector2f(CELL_SIZE, CELL_SIZE));
 
     sf::Clock clock;
-    const sf::Time timePerUpdate = sf::seconds(1.f / 60.f);  // 90 updates per second
+    const sf::Time timePerUpdate = sf::seconds(1.f / 60.f);  // 60 updates per second
     sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
     while (window.isOpen()) {
