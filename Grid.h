@@ -7,6 +7,8 @@ struct Grain {
     sf::Color color;
     Grain(sf::Color c) : color(c) {}
     bool moved = false;
+    float velocity = 1;
+    int immobile_frames = 0;
 };
 
 class Grid {
