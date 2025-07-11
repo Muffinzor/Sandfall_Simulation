@@ -26,6 +26,7 @@ public:
     void update();
     void updateCell(int x, int y);
     void reset_grains();
+    void flip();
     ~Grid();
 };
 

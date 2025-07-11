@@ -38,7 +38,7 @@ int main() {
 
     float hue = 1.0f;
 
-    sf::RenderWindow window(sf::VideoMode(GRID_WIDTH * CELL_SIZE, GRID_HEIGHT * CELL_SIZE), "Grain Test");
+    sf::RenderWindow window(sf::VideoMode(GRID_WIDTH * CELL_SIZE, GRID_HEIGHT * CELL_SIZE), "Sandfall");
     sf::RectangleShape cellShape(sf::Vector2f(CELL_SIZE, CELL_SIZE));
 
     sf::Clock clock;
@@ -50,6 +50,9 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+            if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Space) {
+                grid.flip();
+            }
         }
 
         timeSinceLastUpdate += clock.restart();

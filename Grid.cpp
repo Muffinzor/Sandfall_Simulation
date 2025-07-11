@@ -16,6 +16,26 @@ void Grid::reset_grains() {
     }
 }
 
+void Grid::flip() {
+    for (int y = 0; y < height / 2; ++y) {
+        for (int x = 0; x < width; ++x) {
+            std::swap(cells[y][x], cells[height - 1 - y][x]);
+        }
+    }
+
+    // Reset moved and optionally reverse/gravity-reset velocity
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            Grain* g = cells[y][x];
+            if (g != nullptr) {
+                g->moved = false;
+                g->immobile_frames = 0;
+                g->velocity = 1.0f; // Or keep as-is for momentum carryover
+            }
+        }
+    }
+}
+
 void Grid::update() {
     reset_grains();
 
