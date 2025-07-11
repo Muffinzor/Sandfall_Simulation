@@ -2,11 +2,11 @@
 #include "Grid.h"
 #include "Utility.h"
 
-const int CELL_SIZE = 4;
-const int GRID_WIDTH = 200;
-const int GRID_HEIGHT = 200;
-const int GRAIN_MULTIPLIER = 3;
-const int GRAIN_SPREAD = 5;
+const int CELL_SIZE = 2;
+const int GRID_WIDTH = 400;
+const int GRID_HEIGHT = 400;
+const int GRAIN_MULTIPLIER = 5;
+const int GRAIN_SPREAD = 10;
 
 sf::Color HSVtoRGB(float hue, float sat, float val) {
     int h = static_cast<int>(hue / 60.0f) % 6;
